@@ -1,4 +1,4 @@
-package sistem.restaurant.dtos;
+package sistem.restaurant.dtos.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

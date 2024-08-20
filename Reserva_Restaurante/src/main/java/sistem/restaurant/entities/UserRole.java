@@ -1,6 +1,7 @@
 package sistem.restaurant.entities;
 
-public enum UserRole {
+public enum UserRole
+{
     CLIENT,
     ADMIN
 }
