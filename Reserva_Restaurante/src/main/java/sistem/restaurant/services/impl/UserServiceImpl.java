@@ -1,9 +1,11 @@
 package sistem.restaurant.services.impl;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sistem.restaurant.dtos.user.Credential;
 import sistem.restaurant.dtos.user.UserDto;
 import sistem.restaurant.dtos.user.UserResponseDto;
 import sistem.restaurant.entities.User;
@@ -21,6 +23,21 @@ public class UserServiceImpl implements UserService
 
     @Autowired
     private ModelMapper modelMapper;
+
+
+    @Override
+    public UserResponseDto loginUser(Credential credential)
+    {
+        Optional<User> user = userRepository.findByUserNameOrEmailAndPassword(credential.getIdentity(), credential.getPassword());
+        if(user.isPresent())
+        {
+            return modelMapper.map(user.get(), UserResponseDto.class);
+        }
+        else
+        {
+            throw new EntityNotFoundException("Some parameters are invalid!");
+        }
+    }
 
     @Override
     public UserDto createUser(UserDto userDto)
@@ -52,21 +69,5 @@ public class UserServiceImpl implements UserService
             throw new EntityExistsException("There is no user with that name!");
         }
         return modelMapper.map(user, UserResponseDto.class);
-    }
-
-    @Override
-    public boolean deleteUserByName(String name)
-    {
-        Optional<User> user = userRepository.findByName(name);
-        if(user.isEmpty())
-        {
-            throw new EntityExistsException("There is no user with that name!");
-        }
-        else
-        {
-            User userDeleted = user.get();
-            userRepository.delete(userDeleted);
-            return true;
-        }
     }
 }

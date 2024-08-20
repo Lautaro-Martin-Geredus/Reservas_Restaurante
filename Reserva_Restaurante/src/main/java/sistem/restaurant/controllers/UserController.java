@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sistem.restaurant.dtos.user.Credential;
 import sistem.restaurant.dtos.user.UserDto;
 import sistem.restaurant.dtos.user.UserResponseDto;
 import sistem.restaurant.services.UserService;
@@ -15,6 +16,12 @@ public class UserController
     @Autowired
     private UserService userService;
 
+    @PostMapping("login")
+    public ResponseEntity<UserResponseDto> LoginUser(@RequestBody @Valid Credential credential)
+    {
+        return ResponseEntity.ok(userService.loginUser(credential));
+    }
+
     @PostMapping("")
     public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto)
     {
@@ -25,11 +32,5 @@ public class UserController
     public ResponseEntity<UserResponseDto> getUser(@PathVariable String name)
     {
         return ResponseEntity.ok(userService.getUserByName(name));
-    }
-
-    @DeleteMapping("/{name}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable String name)
-    {
-        return ResponseEntity.ok(userService.deleteUserByName(name));
     }
 }
