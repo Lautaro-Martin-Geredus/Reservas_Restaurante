@@ -11,7 +11,5 @@ public interface TableService
 {
     TableeDto createTable(String restaurantName, NewTableDto tableeDto);
 
-    TableeDto updateTable(String restaurantName, NewTableDto tableeDto);
-
     List<NewTableDto> getAllTables();
 }

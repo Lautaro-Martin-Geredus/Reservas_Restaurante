@@ -3,15 +3,16 @@ package sistem.restaurant.services;
 import org.springframework.stereotype.Service;
 import sistem.restaurant.dtos.menu.MenuDto;
 import sistem.restaurant.dtos.menu.MenuItemDto;
+import sistem.restaurant.dtos.menu.NewMenuDto;
 
 @Service
 public interface MenuService
 {
-    MenuDto createMenu(MenuDto menuDto);
+    MenuDto createMenu(String restaurantName, NewMenuDto newMenuDto);
 
-    MenuDto updateMenu(MenuDto menuDto);
+    MenuDto updateMenu(String menuCategory, String restaurantName, NewMenuDto menuDto);
 
-    boolean deleteMenu(String menuName);
+    boolean deleteMenu(String menuCategory);
 
     // Menu Item
 

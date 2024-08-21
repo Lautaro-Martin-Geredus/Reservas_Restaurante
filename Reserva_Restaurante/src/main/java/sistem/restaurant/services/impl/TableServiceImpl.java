@@ -48,24 +48,6 @@ public class TableServiceImpl implements TableService
     }
 
     @Override
-    public TableeDto updateTable(String restaurantName, NewTableDto tableeDto)
-    {
-        Optional<Restaurant> restaurant = restaurantRepository.findByName(restaurantName);
-        if(restaurant.isPresent())
-        {
-
-            Tablee tablee = new Tablee();
-            tablee.setSeats(tableeDto.getSeats());
-            tablee.setAvailable(true);
-            tablee.setRestaurant(modelMapper.map(restaurant.get(), Restaurant.class));
-
-            tableeRepository.save(tablee);
-            return modelMapper.map(tablee, TableeDto.class);
-        }
-        throw new EntityExistsException("Restaurant not found with name!");
-    }
-
-    @Override
     public List<NewTableDto> getAllTables()
     {
         List<Tablee> table = tableeRepository.findAll();

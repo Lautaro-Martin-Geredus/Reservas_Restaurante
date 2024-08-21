@@ -22,12 +22,6 @@ public class TableController
         return ResponseEntity.ok(tableService.createTable(name, tableeDto));
     }
 
-    @PutMapping("/{name}")
-    public ResponseEntity<TableeDto> updateTable(@PathVariable String name, @RequestBody NewTableDto tableeDto)
-    {
-        return ResponseEntity.ok(tableService.updateTable(name, tableeDto));
-    }
-
     @GetMapping("")
     public ResponseEntity<List<NewTableDto>> getAllTables()
     {
