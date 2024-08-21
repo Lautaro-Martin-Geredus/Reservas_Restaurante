@@ -10,9 +10,8 @@ import sistem.restaurant.dtos.restaurant.RestaurantDto;
 @NoArgsConstructor
 @Setter
 @AllArgsConstructor
-public class TableeDto
+public class NewTableDto
 {
     private int seats;
     private boolean available;
-    private RestaurantDto restaurant;
 }
