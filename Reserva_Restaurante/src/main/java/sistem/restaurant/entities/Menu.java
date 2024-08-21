@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Menu
+public class Menu   // Clasificarion dentro del Menu.
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,9 +25,6 @@ public class TableServiceImpl implements TableService
     private TableeRepository tableeRepository;
 
     @Autowired
-    private RestaurantService restaurantService;
-
-    @Autowired
     private RestaurantRepository restaurantRepository;
 
     @Override
@@ -63,12 +60,6 @@ public class TableServiceImpl implements TableService
             return modelMapper.map(tablee, TableeDto.class);
         }
         throw new EntityExistsException("Restaurant not found with name!");
-    }
-
-    @Override
-    public boolean deleteTable(Long id)
-    {
-        tableeRepository
     }
 }
 
