@@ -7,6 +7,8 @@ import sistem.restaurant.dtos.table.NewTableDto;
 import sistem.restaurant.dtos.table.TableeDto;
 import sistem.restaurant.services.TableService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tables")
 public class TableController
@@ -24,5 +26,11 @@ public class TableController
     public ResponseEntity<TableeDto> updateTable(@PathVariable String name, @RequestBody NewTableDto tableeDto)
     {
         return ResponseEntity.ok(tableService.updateTable(name, tableeDto));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<NewTableDto>> getAllTables()
+    {
+        return ResponseEntity.ok(tableService.getAllTables());
     }
 }

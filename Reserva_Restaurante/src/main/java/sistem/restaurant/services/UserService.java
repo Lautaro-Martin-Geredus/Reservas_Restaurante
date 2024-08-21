@@ -11,6 +11,4 @@ public interface UserService
     UserResponseDto loginUser(Credential credential);
 
     UserDto createUser(UserDto userDto);
-
-    UserResponseDto getUserByName(String name);
 }

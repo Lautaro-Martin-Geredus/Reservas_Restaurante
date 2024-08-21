@@ -2,6 +2,7 @@ package sistem.restaurant.services.impl;
 
 import jakarta.persistence.EntityExistsException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sistem.restaurant.dtos.table.NewTableDto;
@@ -13,6 +14,8 @@ import sistem.restaurant.repositories.TableeRepository;
 import sistem.restaurant.services.RestaurantService;
 import sistem.restaurant.services.TableService;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,6 +63,15 @@ public class TableServiceImpl implements TableService
             return modelMapper.map(tablee, TableeDto.class);
         }
         throw new EntityExistsException("Restaurant not found with name!");
+    }
+
+    @Override
+    public List<NewTableDto> getAllTables()
+    {
+        List<Tablee> table = tableeRepository.findAll();
+        Type listType = new TypeToken<List<NewTableDto>>() {}.getType();
+
+        return modelMapper.map(table, listType);
     }
 }
 

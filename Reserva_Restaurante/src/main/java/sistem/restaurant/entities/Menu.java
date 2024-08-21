@@ -10,15 +10,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Menu   // Clasificarion dentro del Menu.
+public class Menu
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-    private double price;
+    private String category;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")

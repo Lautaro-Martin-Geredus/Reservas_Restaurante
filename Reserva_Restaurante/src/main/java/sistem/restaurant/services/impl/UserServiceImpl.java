@@ -59,15 +59,4 @@ public class UserServiceImpl implements UserService
             return modelMapper.map(userSaved, UserDto.class);
         }
     }
-
-    @Override
-    public UserResponseDto getUserByName(String name)
-    {
-        Optional<User> user = userRepository.findByName(name);
-        if(user.isEmpty())
-        {
-            throw new EntityExistsException("There is no user with that name!");
-        }
-        return modelMapper.map(user, UserResponseDto.class);
-    }
 }

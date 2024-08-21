@@ -8,7 +8,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuItem  // Producto individual del Menu.
+public class MenuItem
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

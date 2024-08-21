@@ -2,14 +2,17 @@ package sistem.restaurant.services.impl;
 
 import jakarta.persistence.EntityExistsException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import sistem.restaurant.dtos.restaurant.RestaurantDto;
+import sistem.restaurant.dtos.table.NewTableDto;
 import sistem.restaurant.entities.Restaurant;
 import sistem.restaurant.repositories.RestaurantRepository;
 import sistem.restaurant.services.RestaurantService;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,5 +86,14 @@ public class RestaurantServiceImpl implements RestaurantService
         {
             throw new EntityExistsException("Not restaurant found!");
         }
+    }
+
+    @Override
+    public List<RestaurantDto> getAllRestaurant()
+    {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        Type listType = new TypeToken<List<RestaurantDto>>() {}.getType();
+
+        return modelMapper.map(restaurants, listType);
     }
 }

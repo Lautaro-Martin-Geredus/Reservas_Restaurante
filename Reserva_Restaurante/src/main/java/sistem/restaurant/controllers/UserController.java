@@ -27,10 +27,4 @@ public class UserController
     {
         return ResponseEntity.ok(userService.createUser(userDto));
     }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable String name)
-    {
-        return ResponseEntity.ok(userService.getUserByName(name));
-    }
 }

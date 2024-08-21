@@ -3,6 +3,8 @@ package sistem.restaurant.services;
 import org.springframework.stereotype.Service;
 import sistem.restaurant.dtos.restaurant.RestaurantDto;
 
+import java.util.List;
+
 @Service
 public interface RestaurantService
 {
@@ -13,5 +15,7 @@ public interface RestaurantService
     boolean deleteRestaurant(String name);
 
     RestaurantDto getRestaurant(String name);
+
+    List<RestaurantDto> getAllRestaurant();
 }
 

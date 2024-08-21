@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import sistem.restaurant.dtos.restaurant.RestaurantDto;
 import sistem.restaurant.services.RestaurantService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController
@@ -35,5 +37,11 @@ public class RestaurantController
     public ResponseEntity<RestaurantDto> GetRestaurant(@PathVariable String name)
     {
         return ResponseEntity.ok(restaurantService.getRestaurant(name));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<RestaurantDto>> getAllRestaurants()
+    {
+        return ResponseEntity.ok(restaurantService.getAllRestaurant());
     }
 }
