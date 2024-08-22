@@ -12,6 +12,7 @@ import sistem.restaurant.dtos.restaurant.RestaurantDto;
 @AllArgsConstructor
 public class NewTableDto
 {
+    private int number;
     private int seats;
     private boolean available;
 }

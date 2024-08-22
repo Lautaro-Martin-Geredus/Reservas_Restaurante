@@ -39,6 +39,7 @@ public class TableServiceImpl implements TableService
             throw new EntityExistsException("Restaurant not found with name!");
         }
         Tablee tablee = new Tablee();
+        tablee.setNumber(tableeDto.getNumber());
         tablee.setSeats(tableeDto.getSeats());
         tablee.setAvailable(true);
         tablee.setRestaurant(modelMapper.map(restaurant.get(), Restaurant.class));

@@ -9,12 +9,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tablee  // Conflicto: palabra reservada.
+public class Tablee
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int number;
     private int seats;
     private boolean available;
 
