@@ -59,4 +59,25 @@ public class UserServiceImpl implements UserService
             return modelMapper.map(userSaved, UserDto.class);
         }
     }
+
+    @Override
+    public UserDto updateUser(String email, UserDto userDto)
+    {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isEmpty())
+        {
+            throw new EntityExistsException("Email Not Found!");
+        }
+        else
+        {
+            User user1 = new User();
+            user1.setName(userDto.getName());
+            user1.setEmail(userDto.getEmail());
+            user1.setPassword(userDto.getPassword());
+            user1.setRole(userDto.getRole());
+
+            User userSaved = userRepository.save(user1);
+            return modelMapper.map(userSaved, UserDto.class);
+        }
+    }
 }

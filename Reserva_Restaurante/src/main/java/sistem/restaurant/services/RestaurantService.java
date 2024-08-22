@@ -14,8 +14,6 @@ public interface RestaurantService
 
     boolean deleteRestaurant(String name);
 
-    RestaurantDto getRestaurant(String name);
-
     List<RestaurantDto> getAllRestaurant();
 }
 

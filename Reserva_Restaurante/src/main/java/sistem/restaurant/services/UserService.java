@@ -11,4 +11,6 @@ public interface UserService
     UserResponseDto loginUser(Credential credential);
 
     UserDto createUser(UserDto userDto);
+
+    UserDto updateUser(String email,UserDto userDto);
 }

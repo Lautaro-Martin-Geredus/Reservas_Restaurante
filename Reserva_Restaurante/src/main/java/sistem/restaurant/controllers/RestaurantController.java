@@ -33,12 +33,6 @@ public class RestaurantController
         return ResponseEntity.ok(restaurantService.deleteRestaurant(name));
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<RestaurantDto> GetRestaurant(@PathVariable String name)
-    {
-        return ResponseEntity.ok(restaurantService.getRestaurant(name));
-    }
-
     @GetMapping("")
     public ResponseEntity<List<RestaurantDto>> getAllRestaurants()
     {

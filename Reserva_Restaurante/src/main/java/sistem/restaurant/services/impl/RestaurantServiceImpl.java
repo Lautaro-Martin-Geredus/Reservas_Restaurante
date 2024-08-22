@@ -75,20 +75,6 @@ public class RestaurantServiceImpl implements RestaurantService
     }
 
     @Override
-    public RestaurantDto getRestaurant(String name)
-    {
-        Optional<Restaurant> restaurant = restaurantRepository.findByName(name);
-        if(restaurant.isPresent())
-        {
-            return modelMapper.map(restaurant.get(), RestaurantDto.class);
-        }
-        else
-        {
-            throw new EntityExistsException("Not restaurant found!");
-        }
-    }
-
-    @Override
     public List<RestaurantDto> getAllRestaurant()
     {
         List<Restaurant> restaurants = restaurantRepository.findAll();
