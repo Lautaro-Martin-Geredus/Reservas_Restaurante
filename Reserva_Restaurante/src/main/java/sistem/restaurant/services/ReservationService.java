@@ -15,5 +15,5 @@ public interface ReservationService
 
     // Admin
 
-    List<NewReservationDto> getAllReservations();
+    List<ReservationDto> getAllReservations();
 }

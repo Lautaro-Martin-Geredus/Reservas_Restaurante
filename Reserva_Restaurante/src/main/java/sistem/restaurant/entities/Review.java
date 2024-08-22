@@ -1,5 +1,6 @@
 package sistem.restaurant.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +25,9 @@ public class Review
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
+    private String clientName;
     private int rating;
     private String comment;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime reviewDateTime;
 }

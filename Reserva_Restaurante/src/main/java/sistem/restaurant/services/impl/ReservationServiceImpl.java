@@ -71,10 +71,10 @@ public class ReservationServiceImpl implements ReservationService
     // Admin
 
     @Override
-    public List<NewReservationDto> getAllReservations()
+    public List<ReservationDto> getAllReservations()
     {
         List<Reservation> reservations = reservationRepository.findAll();
-        Type listType = new TypeToken<List<NewReservationDto>>() {}.getType();
+        Type listType = new TypeToken<List<ReservationDto>>() {}.getType();
 
         return modelMapper.map(reservations, listType);
     }
