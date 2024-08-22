@@ -50,7 +50,7 @@ public class RestaurantServiceImpl implements RestaurantService
         {
             throw new EntityExistsException("Not restaurant found!");
         }
-        Restaurant restaurant1 = new Restaurant();
+        Restaurant restaurant1 = restaurant.get();
         restaurant1.setName(restaurantDto.getName());
         restaurant1.setAddress(restaurantDto.getAddress());
         restaurant1.setPhoneNumber(restaurantDto.getPhoneNumber());

@@ -19,11 +19,13 @@ public interface MenuService
 
     List<NewMenuDto> getAllMenus();
 
-    // Menu Item
+    // MENU ITEM
 
     MenuItemDto createMenuItem(String menu, NewMenuItemDto newMenuItemDto);
 
-    MenuItemDto updateMenuItem(MenuItemDto menuItemDto);
+    MenuItemDto updateMenuItem(String itemName, String menuCategory, NewMenuItemDto newMenuItemDto);
+
+    List<NewMenuItemDto> getAllItems();
 
     boolean deleteMenuItem(String menuName);
 }

@@ -62,7 +62,7 @@ public class MenuServiceImpl implements MenuService
         Optional<Restaurant> restaurant = restaurantRepository.findByName(restaurantName);
         if(menu.isPresent() && restaurant.isPresent())
         {
-            Menu m = new Menu();
+            Menu m = menu.get();
             m.setCategory(menuDto.getCategory());
             m.setRestaurant(modelMapper.map(restaurant.get(), Restaurant.class));
 
@@ -100,16 +100,22 @@ public class MenuServiceImpl implements MenuService
         return modelMapper.map(menu, listType);
     }
 
-    // Menu Item
+    // MENU ITEM
 
     @Override
     public MenuItemDto createMenuItem(String menu, NewMenuItemDto newMenuItemDto)
     {
         Optional<Menu> menuOptional = menuRepository.findByCategory(menu);
+        Optional<MenuItem> menuItemOptional = menuItemRepository.findByName(newMenuItemDto.getName());
         if(menuOptional.isEmpty())
         {
             throw new EntityExistsException("Menu not found!");
         }
+        if(menuItemOptional.isPresent())
+        {
+            throw new EntityExistsException("That Item already exist!");
+        }
+
         MenuItem mI = new MenuItem();
         mI.setName(newMenuItemDto.getName());
         mI.setDescription(newMenuItemDto.getDescription());
@@ -124,14 +130,47 @@ public class MenuServiceImpl implements MenuService
     }
 
     @Override
-    public MenuItemDto updateMenuItem(MenuItemDto menuItemDto)
+    public MenuItemDto updateMenuItem(String itemName, String menuCategory, NewMenuItemDto newMenuItemDto)
     {
-        return null;
+        Optional<MenuItem> menuItemOptional = menuItemRepository.findByName(itemName);
+        Optional<Menu> menuOptional = menuRepository.findByCategory(menuCategory);
+        if(menuItemOptional.isEmpty() && menuOptional.isEmpty())
+        {
+            throw new EntityExistsException("Menu and Item not found!");
+        }
+
+        MenuItem menuItem = menuItemOptional.get();
+        menuItem.setName(newMenuItemDto.getName());
+        menuItem.setDescription(newMenuItemDto.getDescription());
+        menuItem.setPrice(newMenuItemDto.getPrice());
+
+        menuItemRepository.save(menuItem);
+        MenuItemDto menuItemDto = modelMapper.map(menuItem, MenuItemDto.class);
+        menuItemDto.setMenuName(menuOptional.get().getCategory());
+
+        return menuItemDto;
     }
 
     @Override
-    public boolean deleteMenuItem(String menuName)
+    public List<NewMenuItemDto> getAllItems()
     {
-        return false;
+        List<MenuItem> menuItems = menuItemRepository.findAll();
+        Type listType = new TypeToken<List<NewMenuItemDto>>() {}.getType();
+
+        return modelMapper.map(menuItems, listType);
+    }
+
+    @Override
+    public boolean deleteMenuItem(String itemName)
+    {
+        Optional<MenuItem> menuItemOptional = menuItemRepository.findByName(itemName);
+        if(menuItemOptional.isPresent())
+        {
+            menuItemRepository.delete(menuItemOptional.get());
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

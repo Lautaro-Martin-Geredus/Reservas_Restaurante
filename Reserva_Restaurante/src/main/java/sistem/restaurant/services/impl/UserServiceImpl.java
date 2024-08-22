@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService
         }
         else
         {
-            User user1 = new User();
+            User user1 = user.get();
             user1.setName(userDto.getName());
             user1.setEmail(userDto.getEmail());
             user1.setPassword(userDto.getPassword());
