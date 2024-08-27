@@ -45,7 +45,11 @@
             text-align: center;
         }
         .btn-options {
-            margin: 10px;
+            margin: 30px;
+            width: 300px;
+        }
+        .card {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -78,20 +82,20 @@
 
     <div class="content">
         <div class="container">
-            <h1 class="text-center">Manage Restaurants</h1>
+            <h1 class="text-center">Restaurantes</h1>
             <div class="row justify-content-center">
                 <div class="col-md-3 text-center">
-                    <button class="btn btn-primary btn-options" data-toggle="modal" data-target="#createRestaurantModal">Create Restaurant</button>
+                    <button class="btn btn-primary btn-options" data-toggle="modal" data-target="#createRestaurantModal">Crear Restaurante</button>
                 </div>
                 <div class="col-md-3 text-center">
-                    <button class="btn btn-success btn-options" data-toggle="modal" data-target="#updateRestaurantModal">Update Restaurant</button>
+                    <button class="btn btn-success btn-options" data-toggle="modal" data-target="#updateRestaurantModal">Modificar Restaurante</button>
                 </div>
                 <div class="col-md-3 text-center">
-                    <button class="btn btn-danger btn-options" data-toggle="modal" data-target="#deleteRestaurantModal">Delete Restaurant</button>
-                </div>
-                <div class="col-md-3 text-center">
-                    <button class="btn btn-info btn-options" data-toggle="modal" data-target="#viewRestaurantsModal">View Restaurants</button>
-                </div>
+                    <button class="btn btn-danger btn-options" data-toggle="modal" data-target="#deleteRestaurantModal">Eliminar Restaurante</button>
+                </div>               
+            </div>
+            <div class="row" id="restaurantsContainer">
+                
             </div>
         </div>
 
@@ -194,7 +198,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="viewRestaurantsModalLabel">View Restaurants</h5>
+                        <h5 class="modal-title" id="viewRestaurantsModalLabel">Ver Restaurantes</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -210,7 +214,7 @@
                                 </tr>
                             </thead>
                             <tbody id="restaurantsTableBody">
-                                <!-- Data will be inserted here by JavaScript -->
+                                
                             </tbody>
                         </table>
                     </div>
@@ -459,6 +463,36 @@
          {
             window.location.href = 'Login.html';
         });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () 
+    {
+        const restaurantsContainer = document.getElementById('restaurantsContainer');
+        
+        fetch('http://localhost:8080/restaurants/GetRestaurant')
+            .then(response => response.json())
+            .then(data => 
+            {
+                data.forEach(restaurant => 
+                {
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4';
+                    card.innerHTML = `
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${restaurant.name}</h5>
+                                <p class="card-text">Address: ${restaurant.address}</p>
+                                <p class="card-text">Phone: ${restaurant.phoneNumber}</p>
+                                <p class="card-text">Hours: ${restaurant.openingHours}</p>
+                            </div>
+                        </div>
+                    `;
+                    restaurantsContainer.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Error loading restaurants:', error));
     });
 </script>
 </body>
