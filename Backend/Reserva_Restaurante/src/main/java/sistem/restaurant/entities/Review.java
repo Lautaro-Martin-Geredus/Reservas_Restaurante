@@ -27,6 +27,7 @@ public class Review
 
     private String clientName;
     private int rating;
+    @Column(length = 1000)
     private String comment;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime reviewDateTime;

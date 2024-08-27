@@ -14,6 +14,5 @@ ADMIN:
     . MenuController & MenuItemController (All)
 
 
-* Detalle al finalizar el proyecto, dividir en carpetas las paginas CLIENT Y ADMIN
-
+* Detalle al finalizar el proyecto, dividir en carpetas las paginas CLIENT Y ADMIN.
 

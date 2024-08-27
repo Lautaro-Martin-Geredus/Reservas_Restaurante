@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tables</title>
+    <title>Reviews</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -44,15 +44,32 @@
             color: white;
             text-align: center;
         }
-        .btn-options {
-            margin: 30px;
-            margin-left: 10px;
-            width: 300px;
-        }
+    </style>
+    <style>
         .card {
-            margin-bottom: 20px;
-            margin: 20px;
-            padding: 20px;
+            margin: 10px;
+            width: 100%;
+        }
+
+        .rating {
+            font-weight: bold;
+        }
+
+        .rating.yellow {
+            color: yellow;
+        }
+
+        .rating.red {
+            color: red;
+        }
+
+        .rating.green {
+            color: green;
+        }
+
+        .review-date {
+            font-size: 0.85em;
+            color: gray;
         }
     </style>
 </head>
@@ -83,122 +100,60 @@
         </ul>
     </nav>
 
-    <div class="content">
-        <div class="container">
-            <h1 class="text-center">Mesas del Sistema</h1>
-            <div class="row justify-content-center">
-                <div class="col-md-3 text-center">
-                    <button class="btn btn-primary btn-options" data-toggle="modal" data-target="#createTableModal">Crear Mesa</button>
-                </div>            
-            </div>
-            <div class="row" id="tablesContainer">
-                
-            </div>
+    <div class="container mt-4">
+        <h1 class="text-center">Reseñas</h1>
+        <div class="row" id="reviews-container">
+            
         </div>
-
-    <div class="content">
-        <div class="modal fade" id="createTableModal" tabindex="-1" role="dialog" aria-labelledby="createTableModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createTableModalLabel">Crear Mesa</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="createTableForm">
-                            <div class="form-group">
-                                <label for="createTableRestaurantName">Nombre del Restaurante</label>
-                                <input type="text" class="form-control" id="createTableRestaurantName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="createTableNumber">Numero</label>
-                                <input type="number" class="form-control" id="createTableNumber" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="createTableSeat">Asientos</label>
-                                <input type="number" class="form-control" id="createTableSeat" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="createTableBoolean">Disponible</label>
-                                <input type="checkbox" class="form-control" id="createTableBoolean" required>
-                            </div>  
-                            <button type="submit" class="btn btn-primary">Crear</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        $(document).ready(function () 
-        {
-
-        function loadTables() 
-        {
-        $.ajax({
-            url: 'http://localhost:8080/tables', 
-            method: 'GET',
-            success: function (data) 
-            {
-                $('#tablesContainer').empty(); 
-                data.forEach(function (table) 
+        $(document).ready(function()
+         {
+            $.ajax({
+                url: 'http://localhost:8080/reviews', 
+                method: 'GET',
+                success: function(data) 
                 {
-                    var availability = table.available ? 'Disponible' : 'No Disponible';
-                    var cardHtml = `
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Mesa ${table.number}</h5>
-                                <p class="card-text">Restaurante: ${table.restaurantName}</p>
-                                <p class="card-text">Asientos: ${table.seats}</p>
-                                <p class="card-text">Disponibilidad: ${availability}</p>
+                    const reviewsContainer = $('#reviews-container');
+                    data.forEach(review => 
+                    {
+                        let ratingClass = '';
+                        if (review.rating > 6) 
+                        {
+                            ratingClass = 'green';
+                        } else if (review.rating > 5) 
+                        {
+                            ratingClass = 'yellow';
+                        } else {
+                            ratingClass = 'red';
+                        }
+
+                        const reviewCard = `
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><strong>${review.userName}</strong></h5>
+                                        <h6 class="card-subtitle mb-2 text-muted"><strong>${review.restaurantName}</strong></h6>
+                                        <p class="card-text"><em>${review.clientName}</em></p>
+                                        <p class="rating ${ratingClass}">Rating: ${review.rating}</p>
+                                        <p class="card-text">"${review.comment}"</p>
+                                        <p class="review-date">${review.reviewDateTime}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>`;
-                    $('#tablesContainer').append(cardHtml);
-                });
-            },
-            error: function () 
-            {
-                alert('Error al cargar las mesas');
-            }
+                        `;
+                        reviewsContainer.append(reviewCard);
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching reviews:', error);
+                }
+            });
         });
-    }
-
-    loadTables();
-
-    // Create Table
-    $('#createTableForm').submit(function (event) 
-    {
-        event.preventDefault();
-
-        var tableData = 
-        {
-            number: $('#createTableNumber').val(),
-            seats: $('#createTableSeat').val(),
-            available: $('#createTableBoolean').is(':checked')
-        };
-
-        $.ajax({
-            url: 'http://localhost:8080/tables/' + $('#createTableRestaurantName').val(), 
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(tableData),
-            success: function (newTable) 
-            {
-                $('#createTableModal').modal('hide'); 
-                loadTables(); 
-            },
-            error: function () 
-            {
-                alert('Error al crear la mesa');
-            }
-        });
-    });
-    });
     </script>
 
 <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
