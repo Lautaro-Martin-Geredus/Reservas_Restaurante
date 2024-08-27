@@ -1,0 +1,18 @@
+CLIENT: 
+        . UserController (All)
+        . TableController (READ)
+        . ReviewController (All)
+        . RestaurantController (READ)
+        . ReservationController (All)
+        . MenuController & MenuItemController (READ)
+
+ADMIN:
+    . TableController (All)
+    . ReviewController (READ)
+    . RestaurantController (All)
+    . ReservationController (READ)
+    . MenuController & MenuItemController (All)
+
+
+
+

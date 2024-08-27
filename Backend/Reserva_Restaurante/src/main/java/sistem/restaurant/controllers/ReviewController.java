@@ -17,7 +17,7 @@ public class ReviewController
     private ReviewService reviewService;
 
     @GetMapping("")
-    public ResponseEntity<List<ReviewDto>> getAllReviewa()
+    public ResponseEntity<List<ReviewDto>> getAllReviews()
     {
         return ResponseEntity.ok(reviewService.getAllReviews());
     }

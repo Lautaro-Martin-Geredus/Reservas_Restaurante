@@ -87,9 +87,18 @@
                     success: function(response) 
                     {
                         sessionStorage.setItem('user', JSON.stringify(response));
+                        sessionStorage.setItem('role', response.role);
 
-                        showModal("Login succesful!", function() {
-                            window.location.href = 'Home.html';
+                        showModal("Login succesful!", function() 
+                        {
+                            if(response.role === 'ADMIN')
+                            {
+                                window.location.href = 'AdminFront.html';
+                            }
+                            else
+                            {
+                                window.location.href = 'ClientFront.html';
+                            }
                         })
                     },
                     error: function(xhr, status, error) 

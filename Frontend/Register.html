@@ -112,7 +112,8 @@
                     data: JSON.stringify({ name, email, password, role }),
                     success: function(response) 
                     {
-                        showModal("Register succesful!", function() {
+                        showModal("Register succesful!", function() 
+                        {
                             window.location.href = 'Login.html';
                         }) 
                     },
@@ -130,7 +131,8 @@
 
                 $('#messageModal').on('hidden.bs.modal', function () 
                 {
-                    if (callback) {
+                    if (callback) 
+                    {
                         callback();
                     }
                 });
