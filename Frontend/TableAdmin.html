@@ -132,7 +132,70 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        
+        $(document).ready(function () 
+        {
+
+        function loadTables() 
+        {
+        $.ajax({
+            url: 'http://localhost:8080/tables', 
+            method: 'GET',
+            success: function (data) 
+            {
+                $('#tablesContainer').empty(); 
+                data.forEach(function (table) 
+                {
+                    var availability = table.available ? 'Disponible' : 'No Disponible';
+                    var cardHtml = `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Mesa ${table.number}</h5>
+                                <p class="card-text">Restaurante: ${table.restaurantName}</p>
+                                <p class="card-text">Asientos: ${table.seats}</p>
+                                <p class="card-text">Disponibilidad: ${availability}</p>
+                            </div>
+                        </div>`;
+                    $('#tablesContainer').append(cardHtml);
+                });
+            },
+            error: function () 
+            {
+                alert('Error al cargar las mesas');
+            }
+        });
+    }
+
+    loadTables();
+
+    // Create Table
+    $('#createTableForm').submit(function (event) 
+    {
+        event.preventDefault();
+
+        var tableData = 
+        {
+            number: $('#createTableNumber').val(),
+            seats: $('#createTableSeat').val(),
+            available: $('#createTableBoolean').is(':checked')
+        };
+
+        $.ajax({
+            url: 'http://localhost:8080/tables/' + $('#createTableRestaurantName').val(), 
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(tableData),
+            success: function (newTable) 
+            {
+                $('#createTableModal').modal('hide'); 
+                loadTables(); 
+            },
+            error: function () 
+            {
+                alert('Error al crear la mesa');
+            }
+        });
+    });
+    });
     </script>
 
 <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">

@@ -1,6 +1,7 @@
 package sistem.restaurant.services.impl;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +39,37 @@ public class ReservationServiceImpl implements ReservationService
         Optional<Tablee> tableOptional = tableeRepository.findByNumber(tableNumber);
         Optional<Reservation> reservationOptional = reservationRepository.findByClientName(newReservationDto.getClientName());
 
-        if(userOptional.isPresent() && tableOptional.isPresent() && reservationOptional.isPresent())
+        if(userOptional.isEmpty() && tableOptional.isEmpty())
         {
-            throw new EntityExistsException("Reservation already exist!");
+            throw new EntityNotFoundException("User and Table not found!");
         }
+
+        if(reservationOptional.isPresent())
+        {
+            throw new EntityExistsException("Reservation already exists!");
+        }
+
+        Tablee table = tableOptional.get();
+
+        if (!table.isAvailable())
+        {
+            throw new IllegalStateException("Table is already reserved!");
+        }
+
+        table.setAvailable(false);
+        tableeRepository.save(table);
+
         Reservation reservation = new Reservation();
-        reservation.setUser(modelMapper.map(userOptional.get(), User.class));
+        reservation.setUser(userOptional.get());
         reservation.setClientName(newReservationDto.getClientName());
-        reservation.setTable(modelMapper.map(tableOptional.get(), Tablee.class));
+        reservation.setTable(table);
         reservation.setReservationDateTime(newReservationDto.getReservationDateTime());
+
         reservationRepository.save(reservation);
 
         ReservationDto r = modelMapper.map(reservation, ReservationDto.class);
         r.setUserName(userOptional.get().getName());
-        r.setTableNumber(tableOptional.get().getNumber());
+        r.setTableNumber(table.getNumber());
 
         return r;
     }
