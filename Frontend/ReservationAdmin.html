@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Reservations</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -44,6 +44,31 @@
             color: white;
             text-align: center;
         }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .card {
+            flex: 1 1 calc(33.333% - 1rem); 
+            margin: 0.5rem;
+        }
+        .card-header, .card-body {
+            padding: 1rem;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+        .card-subtitle {
+            font-weight: bold;
+        }
+        .card-text {
+            font-style: italic;
+        }
+        .reservation-date {
+            font-size: 0.9rem;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -62,7 +87,7 @@
                 <a class="nav-link" href="menus.html">Menus</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="ReservationAdmin.html">Reservations</a>
+                <a class="nav-link" href="reservations.html">Reservations</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="RestaurantAdmin.html">Restaurants</a>
@@ -72,6 +97,48 @@
             </li>
         </ul>
     </nav>
+
+    <div class="content">
+        <h1 class="text-center">Reservations</h1>
+        <div class="card-container" id="reservations-container">
+            
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function()
+         {
+            $.ajax({
+                url: 'http://localhost:8080/reservations',
+                method: 'GET',
+                success: function(data) 
+                {
+                    const reservationsContainer = $('#reservations-container');
+                    data.forEach(reservation => 
+                    {
+                        const reservationCard = `
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><strong>${reservation.userName}</strong></h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">Table Number: ${reservation.tableNumber}</h6>
+                                    <p class="card-text"><em>${reservation.clientName}</em></p>
+                                    <p class="reservation-date">${reservation.reservationDateTime}</p>
+                                </div>
+                            </div>
+                        `;
+                        reservationsContainer.append(reservationCard);
+                    });
+                },
+                error: function(error) 
+                {
+                    console.error('Error fetching reservations:', error);
+                }
+            });
+        });
+    </script>
 
     <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -117,26 +184,22 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Desea cerrar sesion?
+                    Desea cerrar sesión?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Mantenerse en Linea</button>
-                    <button type="button" class="btn btn-primary" id="logoutConfirm">Cerrar Sesion</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Mantenerse en Línea</button>
+                    <button type="button" class="btn btn-primary" id="logoutConfirm">Cerrar Sesión</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() 
-        {
+        $(document).ready(function() {
             const user = JSON.parse(sessionStorage.getItem('user'));
 
             // Update User
-            if (user && user.email) 
-            {
+            if (user && user.email) {
                 $('#emailLink').text(user.email);
                 $('#userName').val(user.name);
                 $('#userEmail').val(user.email);
@@ -144,12 +207,10 @@
                 $('#userRole').val(user.role);
             }
 
-            $('#updateUserForm').submit(function(event) 
-            {
+            $('#updateUserForm').submit(function(event) {
                 event.preventDefault();
                 
-                const updatedUser = 
-                {
+                const updatedUser = {
                     name: $('#userName').val(),
                     email: $('#userEmail').val(),
                     password: $('#userPassword').val(),
@@ -161,23 +222,20 @@
                     type: 'PUT',
                     contentType: 'application/json',
                     data: JSON.stringify(updatedUser),
-                    success: function(response) 
-                    {
+                    success: function(response) {
                         alert('User updated successfully');
                         sessionStorage.setItem('user', JSON.stringify(response));
                         $('#emailLink').text(response.email);
                         $('#userModal').modal('hide');
                     },
-                    error: function(xhr) 
-                    {
+                    error: function(xhr) {
                         alert(`Error: ${xhr.responseText}`);
                     }
                 });
             });
 
             // Log out
-            $('#logoutConfirm').click(function()
-             {
+            $('#logoutConfirm').click(function() {
                 window.location.href = 'Login.html';
             });
         });
