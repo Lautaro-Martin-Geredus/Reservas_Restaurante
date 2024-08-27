@@ -34,10 +34,16 @@ public class TableServiceImpl implements TableService
     public TableeDto createTable(String restaurantName, NewTableDto tableeDto)
     {
         Optional<Restaurant> restaurant = restaurantRepository.findByName(restaurantName);
+        Optional<Tablee> tableeOptional = tableeRepository.findByNumber(tableeDto.getNumber());
         if(restaurant.isEmpty())
         {
             throw new EntityExistsException("Restaurant not found with name!");
         }
+        if(tableeOptional.isPresent())
+        {
+            throw new EntityExistsException("Table with that number already exist!");
+        }
+
         Tablee tablee = new Tablee();
         tablee.setNumber(tableeDto.getNumber());
         tablee.setSeats(tableeDto.getSeats());
@@ -45,14 +51,17 @@ public class TableServiceImpl implements TableService
         tablee.setRestaurant(modelMapper.map(restaurant.get(), Restaurant.class));
 
         tableeRepository.save(tablee);
-        return modelMapper.map(tablee, TableeDto.class);
+
+        TableeDto t = modelMapper.map(tablee, TableeDto.class);
+        t.setRestaurantName(restaurant.get().getName());
+        return t;
     }
 
     @Override
-    public List<NewTableDto> getAllTables()
+    public List<TableeDto> getAllTables()
     {
         List<Tablee> table = tableeRepository.findAll();
-        Type listType = new TypeToken<List<NewTableDto>>() {}.getType();
+        Type listType = new TypeToken<List<TableeDto>>() {}.getType();
 
         return modelMapper.map(table, listType);
     }

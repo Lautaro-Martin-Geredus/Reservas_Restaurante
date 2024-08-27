@@ -23,7 +23,7 @@ public class TableController
     }
 
     @GetMapping("")
-    public ResponseEntity<List<NewTableDto>> getAllTables()
+    public ResponseEntity<List<TableeDto>> getAllTables()
     {
         return ResponseEntity.ok(tableService.getAllTables());
     }

@@ -15,5 +15,5 @@ public class TableeDto
     private int number;
     private int seats;
     private boolean available;
-    private RestaurantDto restaurant;
+    private String restaurantName;
 }
