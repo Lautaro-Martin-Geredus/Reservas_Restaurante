@@ -27,6 +27,10 @@ public class Reservation
     @JoinColumn(name = "table_id")
     private Tablee table;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime reservationDateTime;
 }

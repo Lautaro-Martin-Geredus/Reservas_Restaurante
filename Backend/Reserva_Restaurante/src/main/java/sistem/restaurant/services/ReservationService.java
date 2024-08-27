@@ -9,7 +9,8 @@ import java.util.List;
 @Service
 public interface ReservationService
 {
-    ReservationDto createReservation(String userName, int tableNumber, NewReservationDto newReservationDto);
+    ReservationDto createReservation(String userName, int tableNumber, String restaurantName,
+                                     NewReservationDto newReservationDto);
 
     boolean deleteReservation(String clientName);
 

@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 import sistem.restaurant.dtos.menuItem.NewMenuItemDto;
 import sistem.restaurant.dtos.reservation.NewReservationDto;
 import sistem.restaurant.dtos.reservation.ReservationDto;
-import sistem.restaurant.entities.MenuItem;
-import sistem.restaurant.entities.Reservation;
-import sistem.restaurant.entities.Tablee;
-import sistem.restaurant.entities.User;
+import sistem.restaurant.entities.*;
 import sistem.restaurant.repositories.ReservationRepository;
+import sistem.restaurant.repositories.RestaurantRepository;
 import sistem.restaurant.repositories.TableeRepository;
 import sistem.restaurant.repositories.UserRepository;
 import sistem.restaurant.services.ReservationService;
@@ -30,18 +28,20 @@ public class ReservationServiceImpl implements ReservationService
     @Autowired private TableeRepository tableeRepository;
     @Autowired private UserRepository userRepository;
     @Autowired private ModelMapper modelMapper;
+    @Autowired private RestaurantRepository restaurantRepository;
 
     @Override
-    public ReservationDto createReservation(String userName, int tableNumber,
+    public ReservationDto createReservation(String userName, int tableNumber, String restaurantName,
                                             NewReservationDto newReservationDto)
     {
         Optional<User> userOptional = userRepository.findByName(userName);
         Optional<Tablee> tableOptional = tableeRepository.findByNumber(tableNumber);
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findByName(restaurantName);
         Optional<Reservation> reservationOptional = reservationRepository.findByClientName(newReservationDto.getClientName());
 
-        if(userOptional.isEmpty() && tableOptional.isEmpty())
+        if(userOptional.isEmpty() && tableOptional.isEmpty() && restaurantOptional.isEmpty())
         {
-            throw new EntityNotFoundException("User and Table not found!");
+            throw new EntityNotFoundException("User, Table and Restaurant not found!");
         }
 
         if(reservationOptional.isPresent())
@@ -63,6 +63,7 @@ public class ReservationServiceImpl implements ReservationService
         reservation.setUser(userOptional.get());
         reservation.setClientName(newReservationDto.getClientName());
         reservation.setTable(table);
+        reservation.setRestaurant(restaurantOptional.get());
         reservation.setReservationDateTime(newReservationDto.getReservationDateTime());
 
         reservationRepository.save(reservation);
@@ -70,6 +71,7 @@ public class ReservationServiceImpl implements ReservationService
         ReservationDto r = modelMapper.map(reservation, ReservationDto.class);
         r.setUserName(userOptional.get().getName());
         r.setTableNumber(table.getNumber());
+        r.setRestaurantName(restaurantOptional.get().getName());
 
         return r;
     }

@@ -16,11 +16,12 @@ public class ReservationController
     @Autowired
     private ReservationService reservationService;
 
-    @PostMapping("/{userName}/{tableNumber}")
+    @PostMapping("/{userName}/{tableNumber}/{restaurantName}")
     public ResponseEntity<ReservationDto> createReservation(@PathVariable String userName, @PathVariable int tableNumber,
+                                                            @PathVariable String restaurantName,
                                                             @RequestBody NewReservationDto newReservationDto)
     {
-        return ResponseEntity.ok(reservationService.createReservation(userName, tableNumber, newReservationDto));
+        return ResponseEntity.ok(reservationService.createReservation(userName, tableNumber, restaurantName, newReservationDto));
     }
 
     @DeleteMapping("/{clientName}")
