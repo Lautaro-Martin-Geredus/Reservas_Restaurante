@@ -100,7 +100,6 @@
         </div>
 
     <div class="content">
-        <!-- Create Restaurant Modal -->
         <div class="modal fade" id="createRestaurantModal" tabindex="-1" role="dialog" aria-labelledby="createRestaurantModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -135,7 +134,6 @@
             </div>
         </div>
 
-        <!-- Update Restaurant Modal -->
         <div class="modal fade" id="updateRestaurantModal" tabindex="-1" role="dialog" aria-labelledby="updateRestaurantModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -170,7 +168,6 @@
             </div>
         </div>
 
-        <!-- Delete Restaurant Modal -->
         <div class="modal fade" id="deleteRestaurantModal" tabindex="-1" role="dialog" aria-labelledby="deleteRestaurantModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -220,6 +217,7 @@
                     {
                         alert('Restaurant created successfully');
                         $('#createRestaurantModal').modal('hide');
+                        location.reload();
                     },
                     error: function(xhr) 
                     {

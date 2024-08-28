@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menus</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .navbar-nav {
+            flex-direction: column;
+            width: 100%;
+        }
+        .nav-item {
+            width: 100%;
+        }
+        .nav-link {
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 0;
+            margin: 20px;
+        }
+        .nav-link:hover {
+            background-color: #495057;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .navbar-brand {
+            font-size: 1.2rem;
+            color: white;
+            text-align: center;
+        }
+        .btn-options {
+            margin: 30px;
+            width: 300px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="emailLink" data-toggle="modal" data-target="#userModal">Correo Electrónico</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="TableAdmin.html">Tables</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="ReviewAdmin.html">Reviews</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="MenuAdmin.html">Menus</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="ReservationAdmin.html">Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="RestaurantAdmin.html">Restaurants</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Log out?</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            <h1 class="text-center">Menús</h1>
+            <div class="row justify-content-center">
+                <div class="col-md-3 text-center">
+                    <button class="btn btn-primary btn-options" data-toggle="modal" data-target="#createMenuModal">Crear Menú</button>
+                </div>
+                <div class="col-md-3 text-center">
+                    <button class="btn btn-success btn-options" data-toggle="modal" data-target="#updateMenuModal">Modificar Menú</button>
+                </div>
+                <div class="col-md-3 text-center">
+                    <button class="btn btn-danger btn-options" data-toggle="modal" data-target="#deleteMenuModal">Eliminar Menú</button>
+                </div>               
+            </div>
+            <div class="row" id="menusContainer">
+                
+            </div>
+        </div>
+    
+        <div class="modal fade" id="createMenuModal" tabindex="-1" role="dialog" aria-labelledby="createMenuModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createMenuModalLabel">Crear Menú</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createMenuForm">
+                            <div class="form-group">
+                                <label for="createMenuCategory">Categoría</label>
+                                <input type="text" class="form-control" id="createMenuCategory" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="createMenuRestaurant">Restaurante</label>
+                                <input type="text" class="form-control" id="createMenuRestaurant" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Crear</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal fade" id="updateMenuModal" tabindex="-1" role="dialog" aria-labelledby="updateMenuModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateMenuModalLabel">Modificar Menú</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateMenuForm">
+                            <div class="form-group">
+                                <label for="updateMenuCategory">Categoría Actual</label>
+                                <input type="text" class="form-control" id="updateMenuCategory" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="updateMenuNewCategory">Nueva Categoría</label>
+                                <input type="text" class="form-control" id="updateMenuNewCategory" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="updateMenuRestaurant">Restaurante</label>
+                                <input type="text" class="form-control" id="updateMenuRestaurant" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Modificar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal fade" id="deleteMenuModal" tabindex="-1" role="dialog" aria-labelledby="deleteMenuModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteMenuModalLabel">Eliminar Menú</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deleteMenuForm">
+                            <div class="form-group">
+                                <label for="deleteMenuCategory">Categoría del Menú</label>
+                                <input type="text" class="form-control" id="deleteMenuCategory" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>        
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() 
+        {
+    $('#createMenuForm').submit(function(event) 
+    {
+        event.preventDefault();
+        const menuData = 
+        {
+            category: $('#createMenuCategory').val(),
+            restaurantName: $('#createMenuRestaurant').val()
+        };
+
+        $.ajax({
+            url: 'http://localhost:8080/menus/' + menuData.restaurantName,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(menuData),
+            success: function(response) 
+            {
+                alert('Menú creado con éxito');
+                location.reload(); 
+            },
+            error: function() 
+            {
+                alert('Error al crear el menú');
+            }
+        });
+    });
+
+    $('#updateMenuForm').submit(function(event) 
+    {
+        event.preventDefault();
+        const menuData = 
+        {
+            category: $('#updateMenuNewCategory').val(),
+            restaurantName: $('#updateMenuRestaurant').val()
+        };
+        const menuCategory = $('#updateMenuCategory').val();
+
+        $.ajax({
+            url: 'http://localhost:8080/menus/' + menuData.restaurantName + '/' + menuCategory,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(menuData),
+            success: function(response) 
+            {
+                alert('Menú actualizado con éxito');
+                location.reload(); 
+            },
+            error: function() {
+                alert('Error al actualizar el menú');
+            }
+        });
+    });
+
+    $('#deleteMenuForm').submit(function(event) 
+    {
+        event.preventDefault();
+        const menuCategory = $('#deleteMenuCategory').val();
+
+        $.ajax({
+            url: 'http://localhost:8080/menus/' + menuCategory,
+            method: 'DELETE',
+            success: function(response) 
+            {
+                if (response) 
+                {
+                    alert('Menú eliminado con éxito');
+                    location.reload(); 
+                } 
+                else 
+                {
+                    alert('No se pudo eliminar el menú');
+                }
+            },
+            error: function() 
+            {
+                alert('Error al eliminar el menú');
+            }
+        });
+    });
+});
+    </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () 
+{
+    const menusContainer = document.getElementById('menusContainer');
+    
+    fetch('http://localhost:8080/menus')
+        .then(response => response.json())
+        .then(data => 
+        {
+            data.forEach(menu => 
+            {
+                const card = document.createElement('div');
+                card.className = 'col-md-4';
+                card.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${menu.category}</h5>
+                            <p class="card-text">Categoria: ${menu.category}</p>
+                            <p class="card-text">Restaurante: ${menu.restaurantName}</p>
+                        </div>
+                    </div>
+                `;
+                menusContainer.appendChild(card);
+            });
+        })
+        .catch(error => console.error('Error loading Menus:', error));
+});
+
+  </script>
+
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Update User Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateUserForm">
+                    <div class="form-group">
+                        <label for="userName">Name</label>
+                        <input type="text" class="form-control" id="userName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email</label>
+                        <input type="email" class="form-control" id="userEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Password</label>
+                        <input type="password" class="form-control" id="userPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole">Role</label>
+                        <input type="text" class="form-control" id="userRole" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Desea cerrar sesion?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Mantenerse en Linea</button>
+                <button type="button" class="btn btn-primary" id="logoutConfirm">Cerrar Sesion</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() 
+    {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+
+        // Update User
+        if (user && user.email) 
+        {
+            $('#emailLink').text(user.email);
+            $('#userName').val(user.name);
+            $('#userEmail').val(user.email);
+            $('#userPassword').val(user.password);
+            $('#userRole').val(user.role);
+        }
+
+        $('#updateUserForm').submit(function(event) 
+        {
+            event.preventDefault();
+            
+            const updatedUser = 
+            {
+                name: $('#userName').val(),
+                email: $('#userEmail').val(),
+                password: $('#userPassword').val(),
+                role: $('#userRole').val()
+            };
+
+            $.ajax({
+                url: `http://localhost:8080/users/${user.email}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(updatedUser),
+                success: function(response) 
+                {
+                    alert('User updated successfully');
+                    sessionStorage.setItem('user', JSON.stringify(response));
+                    $('#emailLink').text(response.email);
+                    $('#userModal').modal('hide');
+                },
+                error: function(xhr) 
+                {
+                    alert(`Error: ${xhr.responseText}`);
+                }
+            });
+        });
+
+        // Log out
+        $('#logoutConfirm').click(function()
+         {
+            window.location.href = 'Login.html';
+        });
+    });
+</script>
+</body>
+</html>
