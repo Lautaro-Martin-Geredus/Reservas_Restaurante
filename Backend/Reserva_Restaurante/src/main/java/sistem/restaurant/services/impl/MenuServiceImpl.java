@@ -45,7 +45,7 @@ public class MenuServiceImpl implements MenuService
 
         Menu menu = new Menu();
         menu.setCategory(newMenuDto.getCategory());
-        menu.setRestaurant(modelMapper.map(restaurant.get(), Restaurant.class));
+        menu.setRestaurant(restaurant.get());
 
         menuRepository.save(menu);
 
@@ -92,10 +92,10 @@ public class MenuServiceImpl implements MenuService
     }
 
     @Override
-    public List<NewMenuDto> getAllMenus()
+    public List<MenuDto> getAllMenus()
     {
         List<Menu> menu = menuRepository.findAll();
-        Type listType = new TypeToken<List<NewMenuDto>>() {}.getType();
+        Type listType = new TypeToken<List<MenuDto>>() {}.getType();
 
         return modelMapper.map(menu, listType);
     }
@@ -152,10 +152,10 @@ public class MenuServiceImpl implements MenuService
     }
 
     @Override
-    public List<NewMenuItemDto> getAllItems()
+    public List<MenuItemDto> getAllItems()
     {
         List<MenuItem> menuItems = menuItemRepository.findAll();
-        Type listType = new TypeToken<List<NewMenuItemDto>>() {}.getType();
+        Type listType = new TypeToken<List<MenuItemDto>>() {}.getType();
 
         return modelMapper.map(menuItems, listType);
     }

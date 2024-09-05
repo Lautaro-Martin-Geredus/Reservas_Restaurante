@@ -7,6 +7,7 @@ import sistem.restaurant.dtos.menu.MenuDto;
 import sistem.restaurant.dtos.menu.NewMenuDto;
 import sistem.restaurant.dtos.menuItem.MenuItemDto;
 import sistem.restaurant.dtos.menuItem.NewMenuItemDto;
+import sistem.restaurant.entities.Menu;
 import sistem.restaurant.services.MenuService;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class MenuController
     }
 
     @GetMapping("")
-    public ResponseEntity<List<NewMenuDto>> getAllMenus()
+    public ResponseEntity<List<MenuDto>> getAllMenus()
     {
         return ResponseEntity.ok(menuService.getAllMenus());
     }

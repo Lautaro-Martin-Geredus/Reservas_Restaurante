@@ -17,7 +17,7 @@ public interface MenuService
 
     boolean deleteMenu(String menuCategory);
 
-    List<NewMenuDto> getAllMenus();
+    List<MenuDto> getAllMenus();
 
     // MENU ITEM
 
@@ -25,7 +25,7 @@ public interface MenuService
 
     MenuItemDto updateMenuItem(String itemName, String menuCategory, NewMenuItemDto newMenuItemDto);
 
-    List<NewMenuItemDto> getAllItems();
+    List<MenuItemDto> getAllItems();
 
     boolean deleteMenuItem(String menuName);
 }

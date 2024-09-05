@@ -30,7 +30,7 @@ public class MenuItemController
     }
 
     @GetMapping("")
-    public ResponseEntity<List<NewMenuItemDto>> getAllItems()
+    public ResponseEntity<List<MenuItemDto>> getAllItems()
     {
         return ResponseEntity.ok(menuService.getAllItems());
     }
