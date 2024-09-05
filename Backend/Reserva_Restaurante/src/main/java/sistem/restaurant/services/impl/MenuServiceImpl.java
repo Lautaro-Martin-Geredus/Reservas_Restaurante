@@ -33,14 +33,9 @@ public class MenuServiceImpl implements MenuService
     public MenuDto createMenu(String restaurantName, NewMenuDto newMenuDto)
     {
         Optional<Restaurant> restaurant = restaurantRepository.findByName(restaurantName);
-        Optional<Menu> menuOptional = menuRepository.findByCategory(newMenuDto.getCategory());
         if(restaurant.isEmpty())
         {
             throw new EntityExistsException("Restaurant not found with name!");
-        }
-        if(menuOptional.isPresent())
-        {
-            throw new EntityExistsException("That Menu already exist!");
         }
 
         Menu menu = new Menu();
@@ -106,14 +101,9 @@ public class MenuServiceImpl implements MenuService
     public MenuItemDto createMenuItem(String menu, NewMenuItemDto newMenuItemDto)
     {
         Optional<Menu> menuOptional = menuRepository.findByCategory(menu);
-        Optional<MenuItem> menuItemOptional = menuItemRepository.findByName(newMenuItemDto.getName());
         if(menuOptional.isEmpty())
         {
             throw new EntityExistsException("Menu not found!");
-        }
-        if(menuItemOptional.isPresent())
-        {
-            throw new EntityExistsException("That Item already exist!");
         }
 
         MenuItem mI = new MenuItem();
