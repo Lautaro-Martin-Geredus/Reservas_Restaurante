@@ -16,26 +16,26 @@ public class MenuItemController
     @Autowired
     private MenuService menuService;
 
-    @PostMapping("/{nameC}")
+    @PostMapping("CreateItem/{nameC}")
     public ResponseEntity<MenuItemDto> createMenuItem(@PathVariable String nameC, @RequestBody NewMenuItemDto newMenuItemDto)
     {
         return ResponseEntity.ok(menuService.createMenuItem(nameC, newMenuItemDto));
     }
 
-    @PutMapping("/{iName}/{mCategory}")
+    @PutMapping("EditItem/{iName}/{mCategory}")
     public ResponseEntity<MenuItemDto> updateMenuItem(@PathVariable String iName, @PathVariable String mCategory,
                                                       @RequestBody NewMenuItemDto newMenuItemDto)
     {
         return ResponseEntity.ok(menuService.updateMenuItem(iName, mCategory, newMenuItemDto));
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<MenuItemDto>> getAllItems()
+    @GetMapping("GetItems/{categ}")
+    public ResponseEntity<List<MenuItemDto>> getAllItems(@PathVariable String categ)
     {
-        return ResponseEntity.ok(menuService.getAllItems());
+        return ResponseEntity.ok(menuService.getAllItems(categ));
     }
 
-    @DeleteMapping("/{itemN}")
+    @DeleteMapping("DeleteItems/{itemN}")
     public ResponseEntity<Boolean> deleteItem(@PathVariable String itemN)
     {
         return ResponseEntity.ok(menuService.deleteMenuItem(itemN));

@@ -73,13 +73,166 @@
         </ul>
     </nav>
 
-    
+    <div class="content">
+        <h1 class="text-center">Menu Items</h1>
+        <div id="menuItemsList" class="row">
+            
+        </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title" id="formTitle">Create Menu Item</h5>
+                <form id="menuItemForm">
+                    <div class="form-group">
+                        <label for="menuItemName">Item Name</label>
+                        <input type="text" class="form-control" id="menuItemName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="menuItemDescription">Item Description</label>
+                        <input type="text" class="form-control" id="menuItemDescription" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="menuItemPrice">Price</label>
+                        <input type="number" class="form-control" id="menuItemPrice" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Item</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-       
+        $(document).ready(function() 
+        {
+            const urlParams = new URLSearchParams(window.location.search);
+            const menuCategory = urlParams.get('category');
+
+            if (!menuCategory) 
+            {
+                alert('No category specified!');
+                window.location.href = 'MenuAdmin.html';
+            } 
+            else 
+            {
+                $('#formTitle').text(`Manage Items for ${menuCategory}`);
+                loadMenuItems(menuCategory);
+                
+                $('#menuItemForm').submit(function(event) 
+                {
+                    event.preventDefault();
+                    const itemName = $('#menuItemName').val();
+                    const itemDescription = $('#menuItemDescription').val();
+                    const itemPrice = $('#menuItemPrice').val();
+                    const itemData = { name: itemName, description: itemDescription, price: itemPrice };
+
+                    if ($('#formTitle').text().startsWith('Create')) 
+                    {
+                        $.ajax({
+                            url: `http://localhost:8080/menuItems/CreateItem/${menuCategory}`,
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(itemData),
+                            success: function(response) 
+                            {
+                                alert('Item created successfully');
+                                loadMenuItems(menuCategory);
+                                $('#menuItemForm')[0].reset();
+                            },
+                            error: function(xhr) 
+                            {
+                                alert(`Error: ${xhr.responseText}`);
+                            }
+                        });
+                    }
+                     else {
+                        const itemId = $('#menuItemId').val();
+                        $.ajax({
+                            url: `http://localhost:8080/menuItems/EditItem/${menuCategory}/${itemId}`,
+                            type: 'PUT',
+                            contentType: 'application/json',
+                            data: JSON.stringify(itemData),
+                            success: function(response) 
+                            {
+                                alert('Item updated successfully');
+                                loadMenuItems(menuCategory);
+                                $('#formTitle').text('Create Menu Item');
+                                $('#menuItemForm')[0].reset();
+                            },
+                            error: function(xhr) 
+                            {
+                                alert(`Error: ${xhr.responseText}`);
+                            }
+                        });
+                    }
+                });
+
+                function loadMenuItems(category) 
+                {
+                    $.ajax({
+                        url: `http://localhost:8080/menusItems/GetItems/${menuCategory}`,
+                        type: 'GET',
+                        success: function(items) 
+                        {
+                            $('#menuItemsList').empty();
+                            items.forEach(function(item) 
+                            {
+                                const card = `
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${item.name}</h5>
+                                                <p class="card-text">${item.description}</p>
+                                                <p class="card-text">$${item.price.toFixed(2)}</p>
+                                                <button class="btn btn-primary btn-sm edit-btn" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}">Edit</button>
+                                                <button class="btn btn-danger btn-sm delete-btn" data-id="${item.id}">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                $('#menuItemsList').append(card);
+                            });
+
+                            $('.edit-btn').click(function() 
+                            {
+                                const itemId = $(this).data('id');
+                                const itemName = $(this).data('name');
+                                const itemPrice = $(this).data('price');
+                                $('#menuItemName').val(itemName);
+                                $('#menuItemPrice').val(itemPrice);
+                                $('#formTitle').text('Update Menu Item');
+                                $('#menuItemId').val(itemId);
+                            });
+
+                            $('.delete-btn').click(function() 
+                            {
+                                const itemId = $(this).data('id');
+                                if (confirm('Are you sure you want to delete this item?')) 
+                                {
+                                    $.ajax({
+                                        url: `http://localhost:8080/menuItems/DeleteItems/${menuCategory}/${itemName}`,
+                                        type: 'DELETE',
+                                        success: function(response) 
+                                        {
+                                            alert('Item deleted successfully');
+                                            loadMenuItems(category);
+                                        },
+                                        error: function(xhr) 
+                                        {
+                                            alert(`Error: ${xhr.responseText}`);
+                                        }
+                                    });
+                                }
+                            });
+                        },
+                        error: function(xhr) 
+                        {
+                            alert(`Error: ${xhr.responseText}`);
+                        }
+                    });
+                }
+            }
+        });
     </script>
     
     <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">

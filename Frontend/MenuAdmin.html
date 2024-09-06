@@ -74,7 +74,7 @@
     </nav>
 
     <div class="content">
-        <h1>Manage Menus</h1>
+        <h1 class="text-center">Menus</h1>
         <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title" id="formTitle">Create Menu</h5>
@@ -132,25 +132,6 @@
                 }
             });
         }
-        else {
-            $.ajax({
-                url: `http://localhost:8080/menus/${restaurantName}/${menuCategory}`,
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(menuData),
-                success: function(response) 
-                {
-                    alert('Menu updated successfully');
-                    loadMenus(); 
-                    $('#formTitle').text('Create Menu'); 
-                    $('#menuForm')[0].reset(); 
-                },
-                error: function(xhr) 
-                {
-                    alert(`Error: ${xhr.responseText}`);
-                }
-            });
-        }
     });
 
     function loadMenus() 
@@ -171,7 +152,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">${menu.category}</h5>
                                     <p class="card-text">Restaurant: ${restaurantName}</p>
-                                    <button class="btn btn-primary btn-sm edit-btn" data-category="${menu.category}" data-restaurant="${menu.restaurantName}">Edit</button>
+                                    <a href="MenuItemAdmin.html?category=${encodeURIComponent(menu.category)}" class="btn btn-info btn-sm">View Items</a>
                                     <button class="btn btn-danger btn-sm delete-btn" data-category="${menu.category}">Delete</button>
                                 </div>
                             </div>

@@ -142,13 +142,21 @@ public class MenuServiceImpl implements MenuService
     }
 
     @Override
-    public List<MenuItemDto> getAllItems()
+    public List<MenuItemDto> getAllItems(String category)
     {
-        List<MenuItem> menuItems = menuItemRepository.findAll();
+        List<MenuItem> menuItems;
+        if (category == null || category.isEmpty())
+        {
+            menuItems = menuItemRepository.findAll();
+        }
+        else
+        {
+            menuItems = menuItemRepository.findByMenuCategory(category);
+        }
         Type listType = new TypeToken<List<MenuItemDto>>() {}.getType();
-
         return modelMapper.map(menuItems, listType);
     }
+
 
     @Override
     public boolean deleteMenuItem(String itemName)
