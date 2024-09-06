@@ -15,5 +15,5 @@ public class MenuItemDto
     private String name;
     private String description;
     private double price;
-    private String MenuName;
+    //private String MenuName;
 }

@@ -114,7 +114,7 @@ public class MenuServiceImpl implements MenuService
 
         menuItemRepository.save(mI);
         MenuItemDto menuItemDto = modelMapper.map(mI, MenuItemDto.class);
-        menuItemDto.setMenuName(menuOptional.get().getCategory());
+        //menuItemDto.setMenuName(menuOptional.get().getCategory());
 
         return menuItemDto;
     }
@@ -136,7 +136,7 @@ public class MenuServiceImpl implements MenuService
 
         menuItemRepository.save(menuItem);
         MenuItemDto menuItemDto = modelMapper.map(menuItem, MenuItemDto.class);
-        menuItemDto.setMenuName(menuOptional.get().getCategory());
+        //menuItemDto.setMenuName(menuOptional.get().getCategory());
 
         return menuItemDto;
     }
