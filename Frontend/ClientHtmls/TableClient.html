@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviews</title>
+    <title>Tables</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -44,32 +44,15 @@
             color: white;
             text-align: center;
         }
-    </style>
-    <style>
+        .btn-options {
+            margin: 30px;
+            margin-left: 10px;
+            width: 300px;
+        }
         .card {
-            margin: 10px;
-            width: 100%;
-        }
-
-        .rating {
-            font-weight: bold;
-        }
-
-        .rating.yellow {
-            color: yellow;
-        }
-
-        .rating.red {
-            color: red;
-        }
-
-        .rating.green {
-            color: green;
-        }
-
-        .review-date {
-            font-size: 0.85em;
-            color: gray;
+            margin-bottom: 20px;
+            margin: 20px;
+            padding: 20px;
         }
     </style>
 </head>
@@ -80,19 +63,19 @@
                 <a class="nav-link" href="#" id="emailLink" data-toggle="modal" data-target="#userModal">Correo Electrónico</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="TableAdmin.html">Tables</a>
+                <a class="nav-link" href="TableClient.html">Tables</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="ReviewAdmin.html">Reviews</a>
+                <a class="nav-link" href="ReviewClient.html">Reviews</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="MenuAdmin.html">Menus</a>
+                <a class="nav-link" href="MenuClient.html">Menus</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="ReservationAdmin.html">Reservations</a>
+                <a class="nav-link" href="ReservationClient.html">Reservations</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="RestaurantAdmin.html">Restaurants</a>
+                <a class="nav-link" href="RestaurantClient.html">Restaurants</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Log out?</a>
@@ -100,61 +83,53 @@
         </ul>
     </nav>
 
-    <div class="container mt-4">
-        <h1 class="text-center">Reseñas</h1>
-        <div class="row" id="reviews-container">
-            
+    <div class="content">
+        <div class="container">
+            <h1 class="text-center">Mesas del Sistema</h1>
+            <div class="row" id="tablesContainer">
+                
+            </div>
         </div>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        $(document).ready(function()
-         {
-            $.ajax({
-                url: 'http://localhost:8080/reviews', 
-                method: 'GET',
-                success: function(data) 
-                {
-                    const reviewsContainer = $('#reviews-container');
-                    data.forEach(review => 
-                    {
-                        let ratingClass = '';
-                        if (review.rating > 6) 
-                        {
-                            ratingClass = 'green';
-                        } else if (review.rating > 5) 
-                        {
-                            ratingClass = 'yellow';
-                        } else {
-                            ratingClass = 'red';
-                        }
+        $(document).ready(function () 
+        {
 
-                        const reviewCard = `
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><strong>${review.userName}</strong></h5>
-                                        <h6 class="card-subtitle mb-2 text-muted"><strong>${review.restaurantName}</strong></h6>
-                                        <p class="card-text"><em>${review.clientName}</em></p>
-                                        <p class="rating ${ratingClass}">Rating: ${review.rating}</p>
-                                        <p class="card-text">"${review.comment}"</p>
-                                        <p class="review-date">${review.reviewDateTime}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        reviewsContainer.append(reviewCard);
-                    });
-                },
-                error: function(error) 
+        function loadTables() 
+        {
+        $.ajax({
+            url: 'http://localhost:8080/tables', 
+            method: 'GET',
+            success: function (data) 
+            {
+                $('#tablesContainer').empty(); 
+                data.forEach(function (table) 
                 {
-                    console.error('Error fetching reviews:', error);
-                }
-            });
+                    var availability = table.available ? 'Disponible' : 'No Disponible';
+                    var cardHtml = `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Mesa ${table.number}</h5>
+                                <p class="card-text">Restaurante: ${table.restaurantName}</p>
+                                <p class="card-text">Asientos: ${table.seats}</p>
+                                <p class="card-text">Disponibilidad: ${availability}</p>
+                            </div>
+                        </div>`;
+                    $('#tablesContainer').append(cardHtml);
+                });
+            },
+            error: function () 
+            {
+                alert('Error al cargar las mesas');
+            }
         });
+    }
+
+    loadTables();
+    });
     </script>
 
 <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
@@ -260,7 +235,7 @@
         // Log out
         $('#logoutConfirm').click(function()
          {
-            window.location.href = 'Login.html';
+            wwindow.location.href = '../Login.html';
         });
     });
 </script>

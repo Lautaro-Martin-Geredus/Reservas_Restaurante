@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menus</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .navbar-nav {
+            flex-direction: column;
+            width: 100%;
+        }
+        .nav-item {
+            width: 100%;
+        }
+        .nav-link {
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 0;
+            margin: 20px;
+        }
+        .nav-link:hover {
+            background-color: #495057;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .navbar-brand {
+            font-size: 1.2rem;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="emailLink" data-toggle="modal" data-target="#userModal">Correo Electrónico</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="TableAdmin.html">Tables</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="ReviewAdmin.html">Reviews</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="MenuAdmin.html">Menus</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="ReservationAdmin.html">Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="RestaurantAdmin.html">Restaurants</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Log out?</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h1 class="text-center">Menus</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title" id="formTitle">Create Menu</h5>
+                <form id="menuForm">
+                    <div class="form-group">
+                        <label for="restaurantName">Restaurant Name</label>
+                        <input type="text" class="form-control" id="restaurantName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="menuCategory">Menu Category</label>
+                        <input type="text" class="form-control" id="menuCategory" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Menu</button>
+                </form>
+            </div>
+        </div>
+    
+        <div id="menuList" class="row">
+
+        </div>
+    </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() 
+        {
+        loadMenus();
+
+    $('#menuForm').submit(function(event) 
+    {
+        event.preventDefault();
+        const restaurantName = $('#restaurantName').val();
+        const menuCategory = $('#menuCategory').val();
+        const menuData = { category: menuCategory };
+
+        if ($('#formTitle').text() === "Create Menu") 
+        {
+            $.ajax({
+                url: `http://localhost:8080/menus/${restaurantName}`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(menuData),
+                success: function(response) 
+                {
+                    alert('Menu created successfully');
+                    loadMenus(); 
+                    $('#menuForm')[0].reset();
+                },
+                error: function(xhr) 
+                {
+                    alert(`Error: ${xhr.responseText}`);
+                }
+            });
+        }
+    });
+
+    function loadMenus() 
+    {
+        $.ajax({
+            url: 'http://localhost:8080/menus',
+            type: 'GET',
+            success: function(menus) 
+            {
+                $('#menuList').empty();
+                menus.forEach(function(menu) 
+                {
+                    console.log(menu); 
+                    const restaurantName = menu.restaurantName || 'Nombre del restaurante no disponible';
+                    const card = `
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${menu.category}</h5>
+                                    <p class="card-text">Restaurant: ${restaurantName}</p>
+                                    <a href="MenuItemAdmin.html?category=${encodeURIComponent(menu.category)}" class="btn btn-info btn-sm">View Items</a>
+                                    <button class="btn btn-danger btn-sm delete-btn" data-category="${menu.category}">Delete</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    $('#menuList').append(card);
+                });
+
+                $('.edit-btn').click(function() 
+                {
+                    const menuCategory = $(this).data('category');
+                    const restaurantName = $(this).data('restaurant');
+                    $('#menuCategory').val(menuCategory);
+                    $('#restaurantName').val(restaurantName);
+                    $('#formTitle').text('Update Menu');
+                });
+
+                $('.delete-btn').click(function() 
+                {
+                    const menuCategory = $(this).data('category');
+                    if (confirm('Are you sure you want to delete this menu?')) 
+                    {
+                        $.ajax({
+                            url: `http://localhost:8080/menus/${menuCategory}`,
+                            type: 'DELETE',
+                            success: function(response) 
+                            {
+                                alert('Menu deleted successfully');
+                                loadMenus(); 
+                            },
+                            error: function(xhr) 
+                            {
+                                alert(`Error: ${xhr.responseText}`);
+                            }
+                        });
+                    }
+                });
+            },
+            error: function(xhr) 
+            {
+                alert(`Error: ${xhr.responseText}`);
+            }
+        });
+    }
+});
+    </script>
+    
+    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalLabel">Update User Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateUserForm">
+                        <div class="form-group">
+                            <label for="userName">Name</label>
+                            <input type="text" class="form-control" id="userName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmail">Email</label>
+                            <input type="email" class="form-control" id="userEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userPassword">Password</label>
+                            <input type="password" class="form-control" id="userPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userRole">Role</label>
+                            <input type="text" class="form-control" id="userRole" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Desea cerrar sesión?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Mantenerse en Línea</button>
+                    <button type="button" class="btn btn-primary" id="logoutConfirm">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() 
+        {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+
+            // Update User
+            if (user && user.email) 
+            {
+                $('#emailLink').text(user.email);
+                $('#userName').val(user.name);
+                $('#userEmail').val(user.email);
+                $('#userPassword').val(user.password);
+                $('#userRole').val(user.role);
+            }
+
+            $('#updateUserForm').submit(function(event) 
+            {
+                event.preventDefault();
+                
+                const updatedUser = {
+                    name: $('#userName').val(),
+                    email: $('#userEmail').val(),
+                    password: $('#userPassword').val(),
+                    role: $('#userRole').val()
+                };
+
+                $.ajax({
+                    url: `http://localhost:8080/users/${user.email}`,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updatedUser),
+                    success: function(response) 
+                    {
+                        alert('User updated successfully');
+                        sessionStorage.setItem('user', JSON.stringify(response));
+                        $('#emailLink').text(response.email);
+                        $('#userModal').modal('hide');
+                    },
+                    error: function(xhr) 
+                    {
+                        alert(`Error: ${xhr.responseText}`);
+                    }
+                });
+            });
+
+            // Log out
+            $('#logoutConfirm').click(function() 
+            {
+                window.location.href = '../Login.html';
+            });
+        });
+    </script>
+</body>
+</html>
