@@ -100,8 +100,47 @@
 
     <div class="content">
         <h1 class="text-center">Reservations</h1>
+        <div class="text-center mb-4">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createReservationModal">
+                Crear Reserva
+            </button>
+        </div>
         <div class="card-container" id="reservations-container">
             
+        </div>
+    </div>
+
+    <div class="modal fade" id="createReservationModal" tabindex="-1" role="dialog" aria-labelledby="createReservationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createReservationModalLabel">Crear Reserva</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="createReservationForm">
+                        <div class="form-group">
+                            <label for="tableNumber">Número de Mesa</label>
+                            <input type="number" class="form-control" id="tableNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="restaurantName">Nombre del Restaurante</label>
+                            <input type="text" class="form-control" id="restaurantName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientName">Nombre del Cliente</label>
+                            <input type="text" class="form-control" id="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reservationDateTime">Fecha y Hora de Reserva</label>
+                            <input type="datetime-local" class="form-control" id="reservationDateTime" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Crear Reserva</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -109,8 +148,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        $(document).ready(function()
-         {
+        $(document).ready(function() 
+        {
+            const user = JSON.parse(sessionStorage.getItem('user'));
             $.ajax({
                 url: 'http://localhost:8080/reservations',
                 method: 'GET',

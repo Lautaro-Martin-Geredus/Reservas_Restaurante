@@ -128,6 +128,10 @@
                             <input type="text" class="form-control" id="clientName" required>
                         </div>
                         <div class="form-group">
+                            <label for="restaurantName">Nombre del Restaurante</label>
+                            <input type="text" class="form-control" id="restaurantName" required>
+                        </div>
+                        <div class="form-group">
                             <label for="rating">Calificación</label>
                             <input type="number" class="form-control" id="rating" min="1" max="10" required>
                         </div>
@@ -150,7 +154,65 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
+            $('#createReviewForm').submit(function(event) 
+            {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            event.preventDefault(); 
+
+            const clientName = $('#clientName').val();
+            const restaurantName = $('#restaurantName').val();
+            const rating = $('#rating').val();
+            const comment = $('#comment').val();
+            const reviewDateTime = $('#reviewDateTime').val();
+
+            const formattedReviewDateTime = formatDateTime(reviewDateTime);
+
+            const reviewData = 
+            {
+                clientName: clientName,
+                rating: rating,
+                comment: comment,
+                reviewDateTime: formattedReviewDateTime
+            };
+
+            const userName = 
+            {
+                userName: user
+            };
+
+            $.ajax({
+                url: `http://localhost:8080/reviews/${user.name}/${restaurantName}`, 
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(reviewData),
+                success: function(response) 
+                {
+                    alert('Reseña creada exitosamente');
+                    
+                    $('#createReviewModal').modal('hide');
+                    
+                    $('#createReviewForm')[0].reset();
+                },
+                error: function(xhr, status, error) 
+                {
+                    alert(`Error al crear la reseña: ${xhr.responseText}`);
+                }
+            });
+        });
+
+        function formatDateTime(dateTime)
+         {
         
+        const date = new Date(dateTime);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
     </script>
 
     <script>
