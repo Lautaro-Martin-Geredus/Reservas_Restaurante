@@ -148,6 +148,59 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
+        $('#createReservationForm').submit(function(event)
+        {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            event.preventDefault();
+
+            const tableNumber = $('#tableNumber').val();
+            const restaurantName = $('#restaurantName').val();
+            const clientName = $('#clientName').val();
+            const reservationDateTime = $('#reservationDateTime').val();
+
+            const formattedReservationDateTime = formatDateTime(reservationDateTime);
+
+            function formatDateTime(dateTime)  
+            {   
+                const date = new Date(dateTime);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            };
+
+            const reservationData = 
+            {
+                clientName: clientName,
+                reservationDateTime: formattedReservationDateTime
+            };
+
+            $.ajax({
+                url: `http://localhost:8080/reservations/${user.name}/${tableNumber}/${restaurantName}`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(reservationData),
+                success: function(response) 
+                {
+                    alert('Reserva creada exitosamente');      
+                    $('#createReviewModal').modal('hide');                   
+                    $('#createReviewForm')[0].reset();
+
+                    location.reload();
+                },
+                error: function(xhr, status, error) 
+                {
+                    alert(`Error al crear la reseña: ${xhr.responseText}`);
+                }
+            });
+        });
+    </script>
+
+    <script>
         $(document).ready(function() 
         {
             const user = JSON.parse(sessionStorage.getItem('user'));
@@ -179,7 +232,7 @@
                 }
             });
         });
-    </script>
+    </script>  
 
     <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

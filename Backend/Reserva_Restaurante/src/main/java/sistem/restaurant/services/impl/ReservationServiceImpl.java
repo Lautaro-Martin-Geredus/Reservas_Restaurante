@@ -20,6 +20,7 @@ import sistem.restaurant.services.ReservationService;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationServiceImpl implements ReservationService
