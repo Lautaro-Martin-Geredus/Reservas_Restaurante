@@ -101,12 +101,34 @@
     <div class="content">
         <h1 class="text-center">Reservations</h1>
         <div class="text-center mb-4">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createReservationModal">
-                Crear Reserva
-            </button>
+            <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#createReservationModal">Crear Reserva</button>
+            <button class="btn btn-danger mt-3" data-toggle="modal" data-target="#deleteReservationModal">Eliminar Reserva</button>
         </div>
         <div class="card-container" id="reservations-container">
             
+        </div>
+    </div>
+
+        <div class="modal fade" id="deleteReservationModal" tabindex="-1" role="dialog" aria-labelledby="deleteReservationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteReservationModalLabel">Eliminar Reserva</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deleteReservationForm">
+                            <div class="form-group">
+                                <label for="clientName">Nombre del Cliente</label>
+                                <input type="text" class="form-control" id="clientName" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Eliminar Reserva</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -188,7 +210,6 @@
                 {
                     alert('Reserva creada exitosamente');      
                     $('#createReviewModal').modal('hide');                   
-                    $('#createReviewForm')[0].reset();
 
                     location.reload();
                 },
@@ -198,6 +219,31 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        $('#deleteReservationForm').submit(function(event) 
+        {
+                event.preventDefault();
+
+                const clientName = $('#clientName').val();
+
+                $.ajax({
+                    url: `http://localhost:8080/reservations/${clientName}`,
+                    type: 'DELETE',
+                    success: function(response)
+                     {
+                        alert('Reserva eliminada exitosamente');
+                        $('#deleteReservationForm')[0].reset();
+                        $('#deleteReservationModal').modal('hide');
+                        location.reload(); 
+                    },
+                    error: function(xhr, status, error) {
+
+                        alert(`Error al eliminar la reserva: ${xhr.responseText}`);
+                    }
+                });
+            });
     </script>
 
     <script>
